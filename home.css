@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TikTok Downloader</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #000000, #1a1a1a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", sans-serif;
+  color: #fff;
+}
+
+/* ===== CARD ===== */
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #111;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+  text-align: center;
+}
+
+/* ===== TITLE ===== */
+.card h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+/* ===== INPUT ===== */
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* ===== BUTTON ===== */
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #ff0050, #ff3b7f);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px #ff0050;
+}
+
+/* ===== RESULT ===== */
+#result {
+  margin-top: 20px;
+}
+
+a.download {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 18px;
+  background: #00ffd5;
+  color: #000;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.error {
+  color: #ff4d4d;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  margin-top: 20px;
+  font-size: 12px;
+  opacity: 0.5;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>🎵 TikTok Downloader</h1>
+  <p>Paste TikTok video link below</p>
+
+  <input id="url" type="text" placeholder="https://www.tiktok.com/..." />
+  <button onclick="download()">Download</button>
+
+  <div id="result"></div>
+
+  <footer>CSS UI • Simple & Clean</footer>
+</div>
+
+<script>
+async function download() {
+  const url = document.getElementById("url").value;
+  const result = document.getElementById("result");
+
+  if (!url) {
+    result.innerHTML = "<p class='error'>Please paste a TikTok link</p>";
+    return;
+  }
+
+  result.innerHTML = "⏳ Loading...";
+
+  try {
+    const api = `https://tikwm.com/api/?url=${encodeURIComponent(url)}`;
+    const res = await fetch(api);
+    const data = await res.json();
+
+    if (data.data && data.data.play) {
+      result.innerHTML = `
+        <a class="download" href="${data.data.play}" target="_blank">
+          ⬇ Download Video
+        </a>
+      `;
+    } else {
+      result.innerHTML = "<p class='error'>Video not found</p>";
+    }
+  } catch {
+    result.innerHTML = "<p class='error'>API error</p>";
+  }
+}
+</script>
+
+</body>
+</html>
