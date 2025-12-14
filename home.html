@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TikTok Video Downloader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #000, #111);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #ff0050;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #e60048;
+    }
+
+    .result {
+      margin-top: 20px;
+    }
+
+    a {
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #ff4d4d;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h1>🎵 TikTok Video Downloader By HAJO EDITS</h1>
+
+    <input id="url" type="text" placeholder="Paste TikTok video URL here" />
+
+    <button onclick="download()">Download</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    async function download() {
+      const url = document.getElementById("url").value;
+      const result = document.getElementById("result");
+
+      if (!url) {
+        result.innerHTML = "<p class='error'>Please enter a TikTok URL</p>";
+        return;
+      }
+
+      result.innerHTML = "⏳ Processing...";
+
+      try {
+        // Free public API (demo)
+        const api = `https://tikwm.com/api/?url=${encodeURIComponent(url)}`;
+        const res = await fetch(api);
+        const data = await res.json();
+
+        if (data.data && data.data.play) {
+          result.innerHTML = `
+            <p>✅ Video Ready</p>
+            <a href="${data.data.play}" download target="_blank">
+              ⬇️ Download Video
+            </a>
+          `;
+        } else {
+          result.innerHTML = "<p class='error'>Failed to fetch video</p>";
+        }
+
+      } catch (err) {
+        result.innerHTML = "<p class='error'>Error connecting to API</p>";
+      }
+    }
+  </script>
+</body>
+</html>
